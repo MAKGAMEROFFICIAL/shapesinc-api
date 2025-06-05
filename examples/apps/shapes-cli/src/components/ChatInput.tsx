@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import TextInput from 'ink-text-input';
 
@@ -18,9 +18,13 @@ interface ChatInputProps {
   terminalWidth: number;
   inputMode?: 'normal' | 'awaiting_auth';
   onEscape?: () => void;
+  userId?: string;
+  channelId?: string;
+  appName?: string;
+  onRemoveImage?: (index: number) => void;
 }
 
-export const ChatInput = ({ onSend, images, enabledToolsCount, shapeName, authStatus, endpoint, terminalWidth, inputMode = 'normal', onEscape }: ChatInputProps) => {
+export const ChatInput = ({ onSend, images, enabledToolsCount, shapeName, authStatus, endpoint, terminalWidth, inputMode = 'normal', onEscape, userId, channelId, appName, onRemoveImage }: ChatInputProps) => {
   const [input, setInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -37,7 +41,7 @@ export const ChatInput = ({ onSend, images, enabledToolsCount, shapeName, authSt
       onSend(input, images.length > 0 ? imageUrls : undefined);
       setInput('');
       // Reset submitting state after a brief delay
-      setTimeout(() => setIsSubmitting(false), 100);
+      globalThis.setTimeout(() => setIsSubmitting(false), 100);
     }
   };
 
@@ -67,6 +71,27 @@ export const ChatInput = ({ onSend, images, enabledToolsCount, shapeName, authSt
 
   return (
     <Box flexDirection="column" width={terminalWidth}>
+      {/* Images display with remove buttons */}
+      {images.length > 0 && (
+        <Box marginTop={1} paddingX={2}>
+          <Text color="yellow">Images ({images.length}): </Text>
+          {images.map((image, index) => (
+            <Box key={index} marginRight={1}>
+              <Text color="cyan">{image.filename}</Text>
+              <Text color="gray"> ({Math.round(image.size / 1024)}KB) </Text>
+              {onRemoveImage && (
+                <Box 
+                  onPress={() => onRemoveImage(index)}
+                  cursor="pointer"
+                >
+                  <Text color="red">×</Text>
+                </Box>
+              )}
+            </Box>
+          ))}
+        </Box>
+      )}
+      
       {/* Input box with border */}
       <Box borderStyle="round" borderColor="blue" width={terminalWidth}>
         <Box width="100%" paddingX={1}>
@@ -93,9 +118,23 @@ export const ChatInput = ({ onSend, images, enabledToolsCount, shapeName, authSt
           )}
         </Box>
         <Box>
+          {userId && (
+            <Text color="magenta">User: {userId}</Text>
+          )}
+          {channelId && (
+            <Text color="blue">{userId ? ' | ' : ''}Channel: {channelId}</Text>
+          )}
+        </Box>
+        <Box>
           <Text color={getAuthColor()}>{authStatus}</Text>
           <Text color="gray"> | </Text>
           <Text color={getEndpointInfo().color}>{getEndpointInfo().displayUrl}</Text>
+          {appName && (
+            <>
+              <Text color="gray"> | </Text>
+              <Text color="cyan">{appName}</Text>
+            </>
+          )}
         </Box>
       </Box>
     </Box>
