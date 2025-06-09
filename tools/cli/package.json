@@ -1,7 +1,7 @@
 {
-    "name": "@shapesinc/debugger",
+    "name": "@shapesinc/cli",
     "version": "1.0.0",
-    "description": "CLI tool to proxy Shapes API traffic and provide a React/Ink-driven UI for live request/response logging and interactive slash commands.",
+    "description": "A CLI application for interacting with Shapes API",
     "copyright": "Copyright © 2025 Shapes, Inc",
     "author": {
         "name": "Shapes Inc.",
@@ -9,7 +9,6 @@
         "url": "https://shapes.inc"
     },
     "keywords": [
-        "proxy",
         "cli",
         "shapes",
         "debug"
@@ -23,19 +22,31 @@
     "type": "module",
     "main": "dist/main.js",
     "bin": {
-        "shapes-debug": "dist/main.js"
+        "shapes-cli": "dist/main.js"
     },
     "scripts": {
         "start": "node dist/main.js",
-        "start:dev": "tsx src/main.ts",
-        "dev": "tsx src/main.ts",
+        "start:dev": "tsx src/main.tsx",
+        "dev": "tsx src/main.tsx",
         "lint": "eslint . --report-unused-disable-directives --no-error-on-unmatched-pattern",
         "lint:fix": "npm run lint -- --fix",
         "typecheck": "tsc -p tsconfig.app.json --noEmit",
         "build": "tsc -b && tsc -p tsconfig.app.json && tsc-alias -p tsconfig.app.json"
     },
     "dependencies": {
-        "chalk": "^5.4.1"
+        "axios": "^1.9.0",
+        "boxen": "^8.0.1",
+        "chalk": "^5.4.1",
+        "commander": "^14.0.0",
+        "dotenv": "^16.5.0",
+        "form-data": "^4.0.3",
+        "ink": "^6.0.0",
+        "ink-select-input": "^6.2.0",
+        "ink-text-input": "^6.0.0",
+        "inquirer": "^12.6.3",
+        "open": "^10.1.2",
+        "openai": "^5.1.1",
+        "react": "^19.1.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.28.0",
@@ -43,7 +54,7 @@
         "@types/node": "^22.15.30",
         "@types/react": "^19.1.6",
         "eslint": "^9.28.0",
-        "eslint-import-resolver-typescript": "^4.4.3",
+        "eslint-import-resolver-typescript": "^4.4.1",
         "eslint-plugin-import": "^2.31.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-hooks": "^5.2.0",
@@ -53,7 +64,7 @@
         "tsc-alias": "^1.8.16",
         "tsx": "^4.19.4",
         "typescript": "^5.8.3",
-        "typescript-eslint": "^8.33.1"
+        "typescript-eslint": "^8.32.1"
     },
     "engines": {
         "node": ">=18"
